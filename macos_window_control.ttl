@@ -1,0 +1,112 @@
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix macos: <./macos_window_control#> .
+
+# Classes
+macos:WindowManager a owl:Class ;
+    rdfs:label "Window Manager"@en ;
+    rdfs:comment "System component responsible for managing window positions and states"@en .
+
+macos:UniversalControl a owl:Class ;
+    rdfs:subClassOf macos:WindowManager ;
+    rdfs:label "Universal Control"@en ;
+    rdfs:comment "Apple's feature for seamless control across multiple devices"@en .
+
+macos:Configuration a owl:Class ;
+    rdfs:label "Configuration"@en ;
+    rdfs:comment "Storage location and format for settings"@en .
+
+macos:ConfigurationStore a owl:Class ;
+    rdfs:label "Configuration Store"@en ;
+    rdfs:comment "Specific storage mechanism for configurations"@en .
+
+macos:StorageLocation a owl:Class ;
+    rdfs:label "Storage Location"@en ;
+    rdfs:comment "Physical location of configuration storage"@en .
+
+macos:ResearchFinding a owl:Class ;
+    rdfs:label "Research Finding"@en ;
+    rdfs:comment "Results from investigation of configuration storage"@en .
+
+# Properties
+macos:hasConfigurationStore a owl:ObjectProperty ;
+    rdfs:domain macos:WindowManager ;
+    rdfs:range macos:ConfigurationStore ;
+    rdfs:label "has configuration store"@en ;
+    rdfs:comment "Links a window manager to its configuration storage"@en .
+
+macos:storesConfiguration a owl:ObjectProperty ;
+    rdfs:domain macos:ConfigurationStore ;
+    rdfs:range macos:Configuration ;
+    rdfs:label "stores configuration"@en ;
+    rdfs:comment "Links a storage mechanism to the configurations it contains"@en .
+
+macos:hasLocation a owl:ObjectProperty ;
+    rdfs:domain macos:ConfigurationStore ;
+    rdfs:range macos:StorageLocation ;
+    rdfs:label "has location"@en ;
+    rdfs:comment "Physical location where configuration is stored"@en .
+
+macos:hasVerificationStatus a owl:DatatypeProperty ;
+    rdfs:domain macos:StorageLocation ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "has verification status"@en ;
+    rdfs:comment "Whether the location was verified to exist"@en .
+
+# Individuals
+macos:UniversalControlInstance a macos:UniversalControl ;
+    rdfs:label "Universal Control on Monterey"@en ;
+    rdfs:comment "Universal Control implementation in macOS Monterey"@en .
+
+macos:PlistStore a macos:ConfigurationStore ;
+    rdfs:label "Plist Configuration Store"@en ;
+    rdfs:comment "Property list based configuration storage"@en ;
+    macos:storesConfiguration macos:UniversalControlConfig .
+
+macos:iCloudStore a macos:ConfigurationStore ;
+    rdfs:label "iCloud Configuration Store"@en ;
+    rdfs:comment "iCloud based configuration sync and storage"@en ;
+    macos:storesConfiguration macos:UniversalControlConfig .
+
+macos:UniversalControlConfig a macos:Configuration ;
+    rdfs:label "Universal Control Configuration"@en ;
+    rdfs:comment "Settings for Universal Control including window positions"@en .
+
+# Research Findings
+macos:UserPlistLocation a macos:StorageLocation ;
+    rdfs:label "User Preferences Plist Location"@en ;
+    rdfs:comment "~/Library/Preferences/com.apple.universalcontrol.plist"@en ;
+    macos:hasVerificationStatus false .
+
+macos:SystemPlistLocation a macos:StorageLocation ;
+    rdfs:label "System Preferences Plist Location"@en ;
+    rdfs:comment "/Library/Preferences/com.apple.universalcontrol.plist"@en ;
+    macos:hasVerificationStatus false .
+
+macos:WindowManagerLocation a macos:StorageLocation ;
+    rdfs:label "Window Manager Database Location"@en ;
+    rdfs:comment "~/Library/Application Support/com.apple.WindowManager/"@en ;
+    macos:hasVerificationStatus false .
+
+macos:ResearchResult1 a macos:ResearchFinding ;
+    rdfs:label "Configuration Storage Finding"@en ;
+    rdfs:comment """Universal Control settings in macOS Monterey are stored across multiple locations:
+    1. Main settings in com.apple.universalcontrol.plist (when modified)
+    2. Window positioning in WindowManager SQLite databases
+    3. Additional settings synced via iCloud CloudKit"""@en .
+
+# TODO Section
+# - Add specific plist file locations and formats
+# - Include window position coordinate system
+# - Add validation rules for configuration formats
+# - Document iCloud sync mechanisms
+# - Add relationships with third-party window managers
+# - Add SHACL shapes for validation
+# - Document search methods used and results 
