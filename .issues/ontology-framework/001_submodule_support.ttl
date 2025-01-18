@@ -1,0 +1,18 @@
+@prefix : <.#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+:issue1 a :Issue ;
+    :title "Add submodule support for ontology integration" ;
+    :content """Support integration of external ontologies via git submodules.
+
+Requirements:
+- Allow versioned inclusion of external ontologies
+- Maintain clean separation of concerns
+- Enable updates through standard git submodule workflows
+- Document submodule management process
+
+This will enable:
+- Reuse of established ontologies
+- Version control of external dependencies
+- Clear ownership boundaries""" ;
+    :labels "enhancement", "integration" . 

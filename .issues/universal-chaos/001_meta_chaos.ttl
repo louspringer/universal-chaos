@@ -1,0 +1,19 @@
+@prefix : <.#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+:issue1 a :Issue ;
+    :title "Meta: Universal Chaos manifests in development environment" ;
+    :content """Project demonstrated its namesake capabilities by:
+1. Manifesting a mysterious ancient `gh` package (v0.0.4) that masked the GitHub CLI
+2. Creating PATH duplication anomalies
+3. Generally increasing entropy in the development environment
+
+Resolution:
+- Removed the chaotic `gh` package
+- Restored order to GitHub CLI functionality
+- Documented token management process
+
+μ appears to approve of these shenanigans.
+
+Note: Friday deployments may or may not have been involved.""" ;
+    :labels "meta", "documentation" . 

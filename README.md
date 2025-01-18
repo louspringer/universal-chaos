@@ -1,42 +1,79 @@
-# Universal Chaos Workspace
+# Universal Chaos
 
-This workspace is configured to maintain ontological documentation of research and development activities. The primary focus is on macOS window management and Universal Control configurations.
+Ontology framework for managing universal chaos.
 
-## Configuration
+## Setup
 
-The workspace uses Cursor IDE with specific settings for ontology maintenance:
+### Prerequisites
+- Miniconda or Anaconda
+- 1Password CLI (`op`)
+- GitHub account with PAT
+- GitHub CLI (`gh` v2+) installed via Homebrew
 
-- `.cursor/settings.json`: Workspace-specific settings
-- `.cursor/prompt.md`: AI assistant configuration
-- `macos_window_control.ttl`: Main ontology file
+### Environment Setup
+1. Create conda environment:
+   ```bash
+   conda env create -f environment.yml
+   ```
 
-## Ontology Structure
+2. Configure GitHub token:
 
-The ontology tracks:
-- Window management systems
-- Configuration storage locations
-- Research findings
-- Verification status
+   Important: Make sure you're using the system GitHub CLI, not the conda one:
+   ```bash
+   # Verify you're using the correct gh
+   /usr/local/bin/gh --version  # Should show v2.x or higher
+   ```
+   
+   Option A (Recommended) - If you have GitHub CLI installed:
+   ```bash
+   # Login to GitHub CLI if you haven't already
+   /usr/local/bin/gh auth login
+   
+   # Store token in 1Password and configure .env
+   op item create --category="API Credential" --title="GitHub Universal Chaos Token" --vault="Private" --text-field="token=$(/usr/local/bin/gh auth token)"
+   echo 'GITHUB_TOKEN="op://Private/GitHub Universal Chaos Token/token"' > ~/.env
+   ```
 
-## Required Core Ontologies
+   Option B - Manual token creation:
+   - Create a GitHub Personal Access Token (PAT) with required permissions
+   - Store the token in 1Password using this command:
+     ```bash
+     op item create --category="API Credential" --title="GitHub Universal Chaos Token" --vault="Private" --text-field="token=ghp_your_github_token_here"
+     ```
+   - Create/update your .env file to reference the token:
+     ```bash
+     echo 'GITHUB_TOKEN="op://Private/GitHub Universal Chaos Token/token"' > ~/.env
+     ```
 
-The following core ontologies are referenced:
-- meta.ttl
-- metameta.ttl
-- conversation.ttl
-- problem.ttl
-- solution.ttl
+   Option C - If you already have "GitHub Universal Chaos Token" in 1Password:
+   ```bash
+   # Update existing token (if using GitHub CLI)
+   op item edit "GitHub Universal Chaos Token" token="$(/usr/local/bin/gh auth token)"
+   
+   # Or just configure .env to use existing token
+   echo 'GITHUB_TOKEN="op://Private/GitHub Universal Chaos Token/token"' > ~/.env
+   ```
 
-## Development Guidelines
+   Note: If you stored the token in a different vault or with different field names, adjust the op:// reference accordingly.
 
-1. All research findings must be documented in the ontology
-2. Verification status must be tracked for all storage locations
-3. TODO section must be maintained with pending tasks
-4. All new classes and properties must follow validation rules
+   Test that it works:
+   ```bash
+   op run --env-file="$HOME/.env" -- env | grep GITHUB_TOKEN
+   ```
 
-## Usage
+3. Launch Cursor with the correct environment:
+   ```bash
+   # Launch cursor with GitHub CLI and 1Password environment
+   PATH="/usr/local/bin:$PATH" op run --env-file="$HOME/.env" -- cursor
+   ```
 
-When using this workspace:
-1. Ensure Cursor IDE is configured to use the `.cursor` settings
-2. Follow the ontology maintenance guidelines in `.cursor/prompt.md`
-3. Update research findings and verification status as new information is discovered 
+### Usage
+1. Activate environment:
+   ```bash
+   conda activate universal-chaos
+   ```
+
+2. Create GitHub issues:
+   ```bash
+   python create_github_issue.py
+   ``` 
