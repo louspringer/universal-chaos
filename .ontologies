@@ -1,0 +1,28 @@
+# Core Ontology Dependencies
+PROJECT_ONTOLOGY=universal-chaos.ttl
+
+# Core Framework Ontologies
+meta.ttl=./meta.ttl
+metameta.ttl=./metameta.ttl
+problem.ttl=./problem.ttl
+solution.ttl=./solution.ttl
+conversation.ttl=./conversation.ttl
+guidance.ttl=./guidance.ttl
+cognition_patterns.ttl=./cognition_patterns.ttl
+ontology_shapes.ttl=./ontology_shapes.ttl
+
+# Infrastructure Ontologies
+prefix_validation.ttl=./prefix_validation.ttl
+prefix_management.ttl=./prefix_management.ttl
+ontology_dependency_management.ttl=./ontology_dependency_management.ttl
+
+# Additional Framework Ontologies
+process.ttl=./process.ttl
+agent.ttl=./agent.ttl
+time.ttl=./time.ttl
+
+# Domain-Specific Ontologies
+macos_window_control.ttl=./macos_window_control.ttl
+
+# Version Information
+VERSION=1.0.0 

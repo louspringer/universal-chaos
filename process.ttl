@@ -1,0 +1,183 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix process: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix guidance: <./guidance#> .
+
+process: a owl:Ontology ;
+    rdfs:label "Universal Chaos Process Ontology"@en ;
+    rdfs:comment """Process domain concepts for the Universal Chaos project.
+    Defines processes, steps, and workflows."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports guidance: .
+
+# Core Classes
+process:Process rdfs:subClassOf meta:Concept ;
+    rdfs:label "Process"@en ;
+    rdfs:comment "A process or workflow"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:Step rdfs:subClassOf meta:Concept ;
+    rdfs:label "Step"@en ;
+    rdfs:comment "A step in a process"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:Resource rdfs:subClassOf meta:Concept ;
+    rdfs:label "Resource"@en ;
+    rdfs:comment "A resource required for a process"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:Condition rdfs:subClassOf meta:Concept ;
+    rdfs:label "Condition"@en ;
+    rdfs:comment "A condition for process execution"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Process Types
+process:DevelopmentProcess rdfs:subClassOf process:Process ;
+    rdfs:label "Development Process"@en ;
+    rdfs:comment "A software development process"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:TestingProcess rdfs:subClassOf process:Process ;
+    rdfs:label "Testing Process"@en ;
+    rdfs:comment "A testing process"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:DeploymentProcess rdfs:subClassOf process:Process ;
+    rdfs:label "Deployment Process"@en ;
+    rdfs:comment "A deployment process"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+process:hasStep a owl:ObjectProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range process:Step ;
+    rdfs:label "has step"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasResource a owl:ObjectProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range process:Resource ;
+    rdfs:label "has resource"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasCondition a owl:ObjectProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range process:Condition ;
+    rdfs:label "has condition"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasOrder a owl:DatatypeProperty ;
+    rdfs:domain process:Step ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has order"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasDuration a owl:DatatypeProperty ;
+    rdfs:domain process:Step ;
+    rdfs:range xsd:duration ;
+    rdfs:label "has duration"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasStatus a owl:DatatypeProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range xsd:string ;
+    rdfs:label "has status"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasGuidance a owl:ObjectProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range guidance:GuidanceRule ;
+    rdfs:label "has guidance"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:hasConversation a owl:ObjectProperty ;
+    rdfs:domain process:Process ;
+    rdfs:range conversation:Conversation ;
+    rdfs:label "has conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+process:ProcessShape a sh:NodeShape ;
+    sh:targetClass process:Process ;
+    sh:property [
+        sh:path process:hasStep ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path process:hasStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+process:StepShape a sh:NodeShape ;
+    sh:targetClass process:Step ;
+    sh:property [
+        sh:path process:hasOrder ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path process:hasDuration ;
+        sh:datatype xsd:duration ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+process:ExampleDevelopmentProcess a process:DevelopmentProcess ;
+    rdfs:label "Feature Development Process"@en ;
+    rdfs:comment "Process for developing new features"@en ;
+    owl:versionInfo "1.0.0" ;
+    process:hasStep process:ExampleStep1 ;
+    process:hasStep process:ExampleStep2 ;
+    process:hasResource process:ExampleResource ;
+    process:hasCondition process:ExampleCondition ;
+    process:hasStatus "active"@en ;
+    process:hasGuidance guidance:OntologyVersioningRule ;
+    process:hasConversation conversation:ExampleChaosConversation .
+
+process:ExampleStep1 a process:Step ;
+    rdfs:label "Requirements Analysis"@en ;
+    rdfs:comment "First step in the process"@en ;
+    owl:versionInfo "1.0.0" ;
+    process:hasOrder 1 ;
+    process:hasDuration "P2D"^^xsd:duration .
+
+process:ExampleStep2 a process:Step ;
+    rdfs:label "Implementation"@en ;
+    rdfs:comment "Second step in the process"@en ;
+    owl:versionInfo "1.0.0" ;
+    process:hasOrder 2 ;
+    process:hasDuration "P5D"^^xsd:duration .
+
+process:ExampleResource a process:Resource ;
+    rdfs:label "Development Environment"@en ;
+    rdfs:comment "Required development environment"@en ;
+    owl:versionInfo "1.0.0" .
+
+process:ExampleCondition a process:Condition ;
+    rdfs:label "Code Review Required"@en ;
+    rdfs:comment "Condition for process completion"@en ;
+    owl:versionInfo "1.0.0" . 

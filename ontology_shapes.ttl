@@ -1,0 +1,207 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix shapes: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
+@prefix guidance: <./guidance#> .
+
+# Ontology Metadata Shape
+shapes:OntologyShape
+    a sh:NodeShape ;
+    sh:targetClass owl:Ontology ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path owl:versionInfo ;
+        sh:minCount 1 ;
+        sh:pattern "^[0-9]+\\.[0-9]+\\.[0-9]+$" ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path owl:imports ;
+        sh:minCount 1 ;
+    ] .
+
+# Class Documentation Shape
+shapes:ClassShape
+    a sh:NodeShape ;
+    sh:targetClass owl:Class ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path owl:versionInfo ;
+        sh:minCount 1 ;
+        sh:pattern "^[0-9]+\\.[0-9]+\\.[0-9]+$" ;
+    ] .
+
+# Property Documentation Shape
+shapes:PropertyShape
+    a sh:NodeShape ;
+    sh:targetClass owl:ObjectProperty, owl:DatatypeProperty ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path rdfs:domain ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:range ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path owl:versionInfo ;
+        sh:minCount 1 ;
+        sh:pattern "^[0-9]+\\.[0-9]+\\.[0-9]+$" ;
+    ] .
+
+# Instance Documentation Shape
+shapes:InstanceShape
+    a sh:NodeShape ;
+    sh:targetClass owl:NamedIndividual ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] .
+
+# Equivalence Relationship Shape
+shapes:EquivalenceShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf owl:equivalentClass ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:languageIn ("en") ;
+    ] .
+
+# Chaos System Shape
+shapes:ChaosSystemShape
+    a sh:NodeShape ;
+    sh:targetClass meta:ChaosSystem ;
+    sh:property [
+        sh:path meta:hasState ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path meta:hasBehavior ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path meta:hasBoundary ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path meta:hasComponent ;
+        sh:minCount 1 ;
+    ] .
+
+# Process Shape
+shapes:ProcessShape
+    a sh:NodeShape ;
+    sh:targetClass process:Process ;
+    sh:property [
+        sh:path process:hasStep ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path process:hasCondition ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path process:requiresResource ;
+        sh:minCount 1 ;
+    ] .
+
+# Agent Shape
+shapes:AgentShape
+    a sh:NodeShape ;
+    sh:targetClass agent:Agent ;
+    sh:property [
+        sh:path agent:hasCapability ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path agent:hasRole ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path agent:canPerform ;
+        sh:minCount 1 ;
+    ] .
+
+# Time Shape
+shapes:TimeShape
+    a sh:NodeShape ;
+    sh:targetClass time:TimePoint, time:TimeInterval, time:Event ;
+    sh:property [
+        sh:path time:hasStartTime ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path time:hasEndTime ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path time:hasDuration ;
+        sh:minCount 1 ;
+    ] .
+
+# Guidance Rule Shape
+shapes:GuidanceRuleShape
+    a sh:NodeShape ;
+    sh:targetClass guidance:GuidanceRule ;
+    sh:property [
+        sh:path guidance:rulePriority ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path guidance:ruleDescription ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path guidance:hasValidationRule ;
+        sh:minCount 1 ;
+    ] . 

@@ -1,0 +1,189 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <#> .
+@prefix meta: <./meta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
+
+# Ontology Metadata
+<.> a owl:Ontology ;
+    rdfs:label "Universal Chaos Issue Ontology"@en ;
+    rdfs:comment """Defines concepts and relationships for tracking issues
+    in the Universal Chaos project."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports time: .
+
+# Core Classes
+:Issue a owl:Class ;
+    rdfs:subClassOf problem:Problem ;
+    rdfs:label "Issue"@en ;
+    rdfs:comment "A tracked problem or concern in the project"@en ;
+    owl:versionInfo "1.0.0" .
+
+:IssueStatus a owl:Class ;
+    rdfs:label "Issue Status"@en ;
+    rdfs:comment "The current state of an issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+:IssuePriority a owl:Class ;
+    rdfs:label "Issue Priority"@en ;
+    rdfs:comment "The priority level of an issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+:IssueType a owl:Class ;
+    rdfs:label "Issue Type"@en ;
+    rdfs:comment "The category or type of an issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+:hasStatus a owl:ObjectProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range :IssueStatus ;
+    rdfs:label "has status"@en ;
+    rdfs:comment "Links an issue to its current status"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasPriority a owl:ObjectProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range :IssuePriority ;
+    rdfs:label "has priority"@en ;
+    rdfs:comment "Links an issue to its priority level"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasType a owl:ObjectProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range :IssueType ;
+    rdfs:label "has type"@en ;
+    rdfs:comment "Links an issue to its type"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasAssignee a owl:ObjectProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range agent:Agent ;
+    rdfs:label "has assignee"@en ;
+    rdfs:comment "Links an issue to its assigned agent"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasCreatedDate a owl:DatatypeProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has created date"@en ;
+    rdfs:comment "When the issue was created"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasDueDate a owl:DatatypeProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has due date"@en ;
+    rdfs:comment "When the issue is due to be resolved"@en ;
+    owl:versionInfo "1.0.0" .
+
+:hasDescription a owl:DatatypeProperty ;
+    rdfs:domain :Issue ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description"@en ;
+    rdfs:comment "Detailed description of the issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+:IssueShape a sh:NodeShape ;
+    sh:targetClass :Issue ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path :hasStatus ;
+        sh:minCount 1 ;
+        sh:class :IssueStatus ;
+    ] ;
+    sh:property [
+        sh:path :hasPriority ;
+        sh:minCount 1 ;
+        sh:class :IssuePriority ;
+    ] ;
+    sh:property [
+        sh:path :hasType ;
+        sh:minCount 1 ;
+        sh:class :IssueType ;
+    ] ;
+    sh:property [
+        sh:path :hasDescription ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+:OpenStatus a :IssueStatus ;
+    rdfs:label "Open"@en ;
+    rdfs:comment "Issue is open and needs attention"@en ;
+    owl:versionInfo "1.0.0" .
+
+:InProgressStatus a :IssueStatus ;
+    rdfs:label "In Progress"@en ;
+    rdfs:comment "Issue is being worked on"@en ;
+    owl:versionInfo "1.0.0" .
+
+:ResolvedStatus a :IssueStatus ;
+    rdfs:label "Resolved"@en ;
+    rdfs:comment "Issue has been resolved"@en ;
+    owl:versionInfo "1.0.0" .
+
+:HighPriority a :IssuePriority ;
+    rdfs:label "High"@en ;
+    rdfs:comment "High priority issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+:MediumPriority a :IssuePriority ;
+    rdfs:label "Medium"@en ;
+    rdfs:comment "Medium priority issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+:LowPriority a :IssuePriority ;
+    rdfs:label "Low"@en ;
+    rdfs:comment "Low priority issue"@en ;
+    owl:versionInfo "1.0.0" .
+
+:BugType a :IssueType ;
+    rdfs:label "Bug"@en ;
+    rdfs:comment "A software bug or defect"@en ;
+    owl:versionInfo "1.0.0" .
+
+:FeatureType a :IssueType ;
+    rdfs:label "Feature"@en ;
+    rdfs:comment "A new feature request"@en ;
+    owl:versionInfo "1.0.0" .
+
+:TaskType a :IssueType ;
+    rdfs:label "Task"@en ;
+    rdfs:comment "A general task or work item"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Example Issue
+:ExampleIssue a :Issue ;
+    rdfs:label "Example Issue"@en ;
+    rdfs:comment "An example issue instance"@en ;
+    owl:versionInfo "1.0.0" ;
+    :hasStatus :OpenStatus ;
+    :hasPriority :HighPriority ;
+    :hasType :BugType ;
+    :hasDescription "This is an example issue description" ;
+    :hasCreatedDate "2024-03-31T00:00:00Z"^^xsd:dateTime ;
+    :hasDueDate "2024-04-07T00:00:00Z"^^xsd:dateTime . 

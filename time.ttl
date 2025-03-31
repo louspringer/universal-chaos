@@ -1,0 +1,161 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix time: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix guidance: <./guidance#> .
+
+time: a owl:Ontology ;
+    rdfs:label "Universal Chaos Time Ontology"@en ;
+    rdfs:comment """Time domain concepts for the Universal Chaos project.
+    Defines temporal concepts and relationships."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports guidance: .
+
+# Core Classes
+time:TemporalEntity rdfs:subClassOf meta:Concept ;
+    rdfs:label "Temporal Entity"@en ;
+    rdfs:comment "A temporal entity or event"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:Interval rdfs:subClassOf time:TemporalEntity ;
+    rdfs:label "Interval"@en ;
+    rdfs:comment "A time interval"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:Instant rdfs:subClassOf time:TemporalEntity ;
+    rdfs:label "Instant"@en ;
+    rdfs:comment "A point in time"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:Duration rdfs:subClassOf meta:Concept ;
+    rdfs:label "Duration"@en ;
+    rdfs:comment "A duration of time"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+time:hasStartTime a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range time:Instant ;
+    rdfs:label "has start time"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasEndTime a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range time:Instant ;
+    rdfs:label "has end time"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasDuration a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range time:Duration ;
+    rdfs:label "has duration"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasValue a owl:DatatypeProperty ;
+    rdfs:domain time:Instant ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "has value"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasLength a owl:DatatypeProperty ;
+    rdfs:domain time:Duration ;
+    rdfs:range xsd:duration ;
+    rdfs:label "has length"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasProcess a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range process:Process ;
+    rdfs:label "has process"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasAgent a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range agent:Agent ;
+    rdfs:label "has agent"@en ;
+    owl:versionInfo "1.0.0" .
+
+time:hasConversation a owl:ObjectProperty ;
+    rdfs:domain time:TemporalEntity ;
+    rdfs:range conversation:Conversation ;
+    rdfs:label "has conversation"@en ;
+time:timeValue a owl:DatatypeProperty ;
+    rdfs:label "time value" ;
+    rdfs:comment "The value of a time point as a timestamp" ;
+    rdfs:domain time:TimePoint ;
+    rdfs:range xsd:dateTime ;
+    owl:versionInfo "1.0.0" .
+
+# Individuals
+time:ExampleInterval a time:TimeInterval ;
+    rdfs:label "Example Time Interval" ;
+    rdfs:comment "An example time interval" ;
+    time:hasStartTime time:StartPoint ;
+    time:hasEndTime time:EndPoint ;
+    time:hasDuration time:IntervalDuration .
+
+time:StartPoint a time:TimePoint ;
+    rdfs:label "Start Point" ;
+    rdfs:comment "The start time point of the example interval" ;
+    time:timeValue "2024-01-01T00:00:00Z"^^xsd:dateTime .
+
+time:EndPoint a time:TimePoint ;
+    rdfs:label "End Point" ;
+    rdfs:comment "The end time point of the example interval" ;
+    time:timeValue "2024-01-02T00:00:00Z"^^xsd:dateTime .
+
+time:IntervalDuration a time:Duration ;
+    rdfs:label "Interval Duration" ;
+    rdfs:comment "The duration of the example interval" ;
+    time:durationValue "86400"^^xsd:float .
+
+time:ExampleEvent a time:Event ;
+    rdfs:label "Example Event" ;
+    rdfs:comment "An example event" ;
+    time:occursAt time:EventTime ;
+    time:hasDuration time:EventDuration .
+
+time:EventTime a time:TimePoint ;
+    rdfs:label "Event Time" ;
+    rdfs:comment "The time point of the example event" ;
+    time:timeValue "2024-01-01T12:00:00Z"^^xsd:dateTime .
+
+time:EventDuration a time:Duration ;
+    rdfs:label "Event Duration" ;
+    rdfs:comment "The duration of the example event" ;
+    time:durationValue "3600"^^xsd:float .
+
+# SHACL Validation
+time:TimeIntervalShape a sh:NodeShape ;
+    sh:targetClass time:TimeInterval ;
+    sh:property [
+        sh:path time:hasStartTime ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path time:hasEndTime ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path time:hasDuration ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] . 

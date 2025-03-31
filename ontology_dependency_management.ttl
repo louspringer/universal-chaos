@@ -2,73 +2,73 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <ontology_dependency_management.ttl#> .
-@prefix this: <ontology_dependency_management.ttl#> .
-@prefix core: <ontology-framework/core.ttl#> .
-@prefix issue: <ontology-framework/issue.ttl#> .
+@prefix : <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
+@prefix guidance: <./guidance#> .
+@prefix issue: <./issue#> .
 
 # This establishes the ontology's identity
 <.> a owl:Ontology ;
+    rdfs:label "Universal Chaos Ontology Dependency Management"@en ;
+    rdfs:comment """Manages dependencies between ontologies in the Universal Chaos project."""@en ;
     owl:versionInfo "1.0.0" ;
-    owl:imports <ontology-framework/core.ttl> ;
-    owl:imports <ontology-framework/issue.ttl> .
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports time: ;
+    owl:imports guidance: ;
+    owl:imports issue: .
 
 # Dependency Management specific concepts
-:DependencyIssue rdfs:subClassOf issue:Issue ;
+:DependencyIssue a owl:Class ;
+    rdfs:subClassOf issue:Issue ;
     rdfs:label "Dependency Issue"@en ;
-    rdfs:comment "An issue specifically related to ontology dependencies"@en .
+    rdfs:comment "An issue specifically related to ontology dependencies"@en ;
+    owl:versionInfo "1.0.0" .
 
-:SubmoduleUpdate rdfs:subClassOf :DependencyIssue ;
-    rdfs:label "Submodule Update"@en ;
-    rdfs:comment "An issue tracking updates needed in a Git submodule"@en .
+# Properties
+:hasDependency a owl:ObjectProperty ;
+    rdfs:domain owl:Ontology ;
+    rdfs:range owl:Ontology ;
+    rdfs:label "has dependency"@en ;
+    rdfs:comment "Links an ontology to another ontology it depends on"@en ;
+    owl:versionInfo "1.0.0" .
 
-# Properties specific to dependency management
-:hasSubmodule a owl:ObjectProperty ;
-    rdfs:domain :SubmoduleUpdate ;
+:hasDependencyType a owl:DatatypeProperty ;
+    rdfs:domain :hasDependency ;
     rdfs:range xsd:string ;
-    rdfs:label "has submodule"@en ;
-    rdfs:comment "Points to the Git submodule being updated"@en .
+    rdfs:label "has dependency type"@en ;
+    rdfs:comment "Specifies the type of dependency (import, reference, etc.)"@en ;
+    owl:versionInfo "1.0.0" .
 
-:hasTargetVersion a owl:DatatypeProperty ;
-    rdfs:domain :SubmoduleUpdate ;
-    rdfs:range xsd:string ;
-    rdfs:label "has target version"@en ;
-    rdfs:comment "The target version/commit for the submodule update"@en .
+# SHACL Validation
+:DependencyShape a sh:NodeShape ;
+    sh:targetClass owl:Ontology ;
+    sh:property [
+        sh:path :hasDependency ;
+        sh:minCount 1 ;
+        sh:class owl:Ontology ;
+    ] ;
+    sh:property [
+        sh:path :hasDependencyType ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
 
-# Current ontology-framework update tracking
-:OntologyFrameworkUpdate a :SubmoduleUpdate ;
-    rdfs:label "Update ontology-framework submodule"@en ;
-    rdfs:comment "Update the ontology-framework submodule to latest stable version"@en ;
-    issue:hasStatus issue:Pending ;
-    issue:hasPriority 1 ;
-    :hasSubmodule "ontology-framework" ;
-    :hasTargetVersion "main" .
-
-# Add investigation tasks to our SubmoduleUpdate
-:InvestigateFramework a :Task ;
-    rdfs:label "Investigate Framework Patterns"@en ;
-    rdfs:comment "Research existing patterns in ontology-framework"@en ;
-    issue:hasStatus issue:Pending ;
-    issue:hasPriority 1 ;
-    :hasSubtasks (
-        :ReviewImports
-        :CheckValidation
-        :AnalyzeVersioning
-        :ReviewSHACL
-    ) .
-
-:ReviewImports a :Task ;
-    rdfs:label "Review Import Patterns"@en ;
-    rdfs:comment "Review existing import patterns and relative path handling"@en .
-
-:CheckValidation a :Task ;
-    rdfs:label "Check Validation"@en ;
-    rdfs:comment "Review ValidationRule patterns in prompt-manager.ttl"@en .
-
-:AnalyzeVersioning a :Task ;
-    rdfs:label "Analyze Versioning"@en ;
-    rdfs:comment "Study PromptVersion pattern for submodule versioning"@en .
-
-:ReviewSHACL a :Task ;
-    rdfs:label "Review SHACL Usage"@en ;
-    rdfs:comment "Analyze existing SHACL shapes in compose-readme.ttl"@en . 
+# Example Instances
+:ExampleDependency a :DependencyIssue ;
+    rdfs:label "Example Dependency Issue"@en ;
+    rdfs:comment "An example dependency issue instance"@en ;
+    owl:versionInfo "1.0.0" ;
+    :hasDependencyType "import" . 

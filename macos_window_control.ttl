@@ -3,21 +3,43 @@
 @prefix problem: <./problem#> .
 @prefix solution: <./solution#> .
 @prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix macos: <./macos_window_control#> .
+
+# Ontology Metadata
+macos: a owl:Ontology ;
+    rdfs:label "Universal Chaos macOS Window Control Ontology"@en ;
+    rdfs:comment """Defines concepts and relationships for macOS window management
+    in the Universal Chaos project."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports time: .
 
 # Classes
 macos:WindowManager a owl:Class ;
+    rdfs:subClassOf process:Process ;
     rdfs:label "Window Manager"@en ;
-    rdfs:comment "System component responsible for managing window positions and states"@en .
+    rdfs:comment "System component responsible for managing window positions and states"@en ;
+    owl:versionInfo "1.0.0" .
 
 macos:UniversalControl a owl:Class ;
     rdfs:subClassOf macos:WindowManager ;
     rdfs:label "Universal Control"@en ;
-    rdfs:comment "Apple's feature for seamless control across multiple devices"@en .
+    rdfs:comment "Apple's feature for seamless control across multiple devices"@en ;
+    owl:versionInfo "1.0.0" .
 
 macos:Configuration a owl:Class ;
     rdfs:label "Configuration"@en ;
@@ -36,6 +58,13 @@ macos:ResearchFinding a owl:Class ;
     rdfs:comment "Results from investigation of configuration storage"@en .
 
 # Properties
+macos:hasWindowManager a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range macos:WindowManager ;
+    rdfs:label "has window manager"@en ;
+    rdfs:comment "Links an agent to its window manager"@en ;
+    owl:versionInfo "1.0.0" .
+
 macos:hasConfigurationStore a owl:ObjectProperty ;
     rdfs:domain macos:WindowManager ;
     rdfs:range macos:ConfigurationStore ;
@@ -109,4 +138,24 @@ macos:ResearchResult1 a macos:ResearchFinding ;
 # - Document iCloud sync mechanisms
 # - Add relationships with third-party window managers
 # - Add SHACL shapes for validation
-# - Document search methods used and results 
+# - Document search methods used and results
+
+# SHACL Validation
+macos:WindowManagerShape a sh:NodeShape ;
+    sh:targetClass macos:WindowManager ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+macos:ExampleWindowManager a macos:WindowManager ;
+    rdfs:label "Example Window Manager"@en ;
+    rdfs:comment "An example window manager instance"@en ;
+    owl:versionInfo "1.0.0" . 

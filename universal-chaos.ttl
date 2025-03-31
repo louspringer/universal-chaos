@@ -1,0 +1,120 @@
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix chaos: <./universal-chaos#> .
+
+# Ontology Metadata
+chaos: a owl:Ontology ;
+    rdfs:label "Universal Chaos Ontology" ;
+    rdfs:comment "An ontology for modeling and managing universal chaos systems and their interactions" ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports time: .
+
+# Classes
+chaos:System a owl:Class ;
+    rdfs:label "System" ;
+    rdfs:comment "A system that can exhibit chaotic behavior" ;
+    owl:versionInfo "1.0.0" .
+
+chaos:State a owl:Class ;
+    rdfs:label "State" ;
+    rdfs:comment "A state of a chaotic system" ;
+    owl:versionInfo "1.0.0" .
+
+chaos:Transition a owl:Class ;
+    rdfs:label "Transition" ;
+    rdfs:comment "A transition between states in a chaotic system" ;
+    owl:versionInfo "1.0.0" .
+
+chaos:Parameter a owl:Class ;
+    rdfs:label "Parameter" ;
+    rdfs:comment "A parameter that influences system behavior" ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+chaos:hasState a owl:ObjectProperty ;
+    rdfs:label "has state" ;
+    rdfs:comment "Links a system to its current state" ;
+    rdfs:domain chaos:System ;
+    rdfs:range chaos:State ;
+    owl:versionInfo "1.0.0" .
+
+chaos:hasTransition a owl:ObjectProperty ;
+    rdfs:label "has transition" ;
+    rdfs:comment "Links a state to possible transitions" ;
+    rdfs:domain chaos:State ;
+    rdfs:range chaos:Transition ;
+    owl:versionInfo "1.0.0" .
+
+chaos:hasParameter a owl:ObjectProperty ;
+    rdfs:label "has parameter" ;
+    rdfs:comment "Links a system to its parameters" ;
+    rdfs:domain chaos:System ;
+    rdfs:range chaos:Parameter ;
+    owl:versionInfo "1.0.0" .
+
+chaos:parameterValue a owl:DatatypeProperty ;
+    rdfs:label "parameter value" ;
+    rdfs:comment "The value of a parameter" ;
+    rdfs:domain chaos:Parameter ;
+    rdfs:range xsd:float ;
+    owl:versionInfo "1.0.0" .
+
+# Individuals
+chaos:ExampleSystem a chaos:System ;
+    rdfs:label "Example Chaotic System" ;
+    rdfs:comment "An example of a chaotic system" ;
+    chaos:hasState chaos:InitialState ;
+    chaos:hasParameter chaos:AlphaParameter .
+
+chaos:InitialState a chaos:State ;
+    rdfs:label "Initial State" ;
+    rdfs:comment "The initial state of the example system" ;
+    chaos:hasTransition chaos:StateTransition .
+
+chaos:StateTransition a chaos:Transition ;
+    rdfs:label "State Transition" ;
+    rdfs:comment "A transition between states" .
+
+chaos:AlphaParameter a chaos:Parameter ;
+    rdfs:label "Alpha Parameter" ;
+    rdfs:comment "A parameter controlling system behavior" ;
+    chaos:parameterValue "0.5"^^xsd:float .
+
+# SHACL Validation
+chaos:SystemShape a sh:NodeShape ;
+    sh:targetClass chaos:System ;
+    sh:property [
+        sh:path chaos:hasState ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path chaos:hasParameter ;
+        sh:minCount 1 ;
+    ] .
+
+# TODO Section
+chaos:TodoItem a owl:Class ;
+    rdfs:label "TODO Item" ;
+    rdfs:comment "Future enhancements and improvements" ;
+    rdfs:seeAlso "Add more complex chaotic systems" ;
+    rdfs:seeAlso "Implement Lyapunov exponent calculations" ;
+    rdfs:seeAlso "Add bifurcation analysis capabilities" . 

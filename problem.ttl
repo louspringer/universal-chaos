@@ -1,1 +1,123 @@
-ontology-framework/problem.ttl
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix problem: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+
+# Ontology Metadata
+problem: a owl:Ontology ;
+    rdfs:label "Universal Chaos Problem Ontology"@en ;
+    rdfs:comment """Problem domain concepts for the Universal Chaos project.
+    Defines problems, constraints, requirements, and their relationships."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: .
+
+# Core Classes
+problem:Problem a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Problem"@en ;
+    rdfs:comment "A problem to be solved"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:Constraint a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Constraint"@en ;
+    rdfs:comment "A constraint on problem solving"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:Requirement a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Requirement"@en ;
+    rdfs:comment "A requirement for problem solving"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Problem Categories
+problem:WellDefinedProblem a owl:Class ;
+    rdfs:subClassOf problem:Problem ;
+    rdfs:label "Well-Defined Problem"@en ;
+    rdfs:comment "A problem with clear goals and constraints"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:IllDefinedProblem a owl:Class ;
+    rdfs:subClassOf problem:Problem ;
+    rdfs:label "Ill-Defined Problem"@en ;
+    rdfs:comment "A problem with unclear goals or constraints"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:ChaosProblem a owl:Class ;
+    rdfs:subClassOf problem:Problem ;
+    rdfs:label "Chaos Problem"@en ;
+    rdfs:comment "A problem involving chaotic systems"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+problem:hasConstraint a owl:ObjectProperty ;
+    rdfs:domain problem:Problem ;
+    rdfs:range problem:Constraint ;
+    rdfs:label "has constraint"@en ;
+    rdfs:comment "Links a problem to its constraints"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:hasRequirement a owl:ObjectProperty ;
+    rdfs:domain problem:Problem ;
+    rdfs:range problem:Requirement ;
+    rdfs:label "has requirement"@en ;
+    rdfs:comment "Links a problem to its requirements"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:hasPriority a owl:DatatypeProperty ;
+    rdfs:domain problem:Problem ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has priority"@en ;
+    rdfs:comment "Priority level of the problem"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:hasComplexity a owl:DatatypeProperty ;
+    rdfs:domain problem:Problem ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has complexity"@en ;
+    rdfs:comment "Complexity level of the problem"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+problem:ProblemShape a sh:NodeShape ;
+    sh:targetClass problem:Problem ;
+    sh:property [
+        sh:path problem:hasPriority ;
+        sh:minCount 1 ;
+        sh:datatype xsd:integer ;
+    ] ;
+    sh:property [
+        sh:path problem:hasComplexity ;
+        sh:minCount 1 ;
+        sh:datatype xsd:integer ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+problem:WeatherPrediction a problem:ChaosProblem ;
+    rdfs:label "Weather Prediction"@en ;
+    rdfs:comment "Predicting weather patterns in a chaotic system"@en ;
+    owl:versionInfo "1.0.0" ;
+    problem:hasPriority 1 ;
+    problem:hasComplexity 5 ;
+    problem:hasConstraint problem:TimeConstraint ;
+    problem:hasRequirement problem:AccuracyRequirement .
+
+problem:TimeConstraint a problem:Constraint ;
+    rdfs:label "Time Constraint"@en ;
+    rdfs:comment "Must predict within specified time window"@en ;
+    owl:versionInfo "1.0.0" .
+
+problem:AccuracyRequirement a problem:Requirement ;
+    rdfs:label "Accuracy Requirement"@en ;
+    rdfs:comment "Must achieve specified prediction accuracy"@en ;
+    owl:versionInfo "1.0.0" . 

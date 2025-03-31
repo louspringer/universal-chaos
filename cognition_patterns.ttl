@@ -1,0 +1,238 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix agent: <./agent#> .
+@prefix time: <./time#> .
+@prefix guidance: <./guidance#> .
+@prefix cognition_patterns: <#> .
+
+# Core ontology metadata
+cognition_patterns: a owl:Ontology ;
+    rdfs:label "Universal Chaos Cognition Patterns Ontology"@en ;
+    rdfs:comment """Extension ontology capturing relationships between
+    cognitive systems, pattern transmission, and temporal modeling in chaos systems.
+    
+    Builds on core ontologies but maintains separate concerns."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports agent: ;
+    owl:imports time: ;
+    owl:imports guidance: .
+
+# Core Classes
+cognition_patterns:ProcessingSystem a owl:Class ;
+    rdfs:label "Processing System"@en ;
+    rdfs:comment "Base class for different types of information processing systems"@en .
+
+cognition_patterns:DeterministicSystem rdfs:subClassOf cognition_patterns:ProcessingSystem ;
+    rdfs:label "Deterministic System"@en ;
+    rdfs:comment "A system with predictable state transitions (e.g., finite state automaton)"@en .
+
+cognition_patterns:ChaoticSystem rdfs:subClassOf cognition_patterns:ProcessingSystem ;
+    rdfs:label "Chaotic System"@en ;
+    rdfs:comment "A system with sensitive dependence on initial conditions"@en .
+
+# Pattern Transmission Concepts
+cognition_patterns:Pattern a owl:Class ;
+    rdfs:label "Cognitive Pattern"@en ;
+    rdfs:comment "A recognizable pattern in cognitive processing"@en .
+
+cognition_patterns:PatternTransmission a owl:Class ;
+    rdfs:label "Pattern Transmission"@en ;
+    rdfs:comment "The process of transmitting cognitive patterns"@en .
+
+# Temporal Modeling
+cognition_patterns:TemporalContext a owl:Class ;
+    rdfs:label "Temporal Context"@en ;
+    rdfs:comment "Temporal aspects of cognitive processing"@en .
+
+# Processing Status
+cognition_patterns:ProcessingStatus a owl:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:oneOf (
+        cognition_patterns:Initializing
+        cognition_patterns:Processing
+        cognition_patterns:Analyzing
+        cognition_patterns:Complete
+        cognition_patterns:Error
+    ) .
+
+# Status Instances
+cognition_patterns:Initializing a cognition_patterns:ProcessingStatus ;
+    rdfs:label "Initializing"@en ;
+    rdfs:comment "System is initializing processing"@en .
+
+cognition_patterns:Processing a cognition_patterns:ProcessingStatus ;
+    rdfs:label "Processing"@en ;
+    rdfs:comment "Actively processing information"@en .
+
+cognition_patterns:Analyzing a cognition_patterns:ProcessingStatus ;
+    rdfs:label "Analyzing"@en ;
+    rdfs:comment "Analyzing processed information"@en .
+
+cognition_patterns:Complete a cognition_patterns:ProcessingStatus ;
+    rdfs:label "Complete"@en ;
+    rdfs:comment "Processing completed successfully"@en .
+
+cognition_patterns:Error a cognition_patterns:ProcessingStatus ;
+    rdfs:label "Error"@en ;
+    rdfs:comment "Processing encountered an error"@en .
+
+# Properties
+cognition_patterns:processesConversation a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range conversation:Conversation ;
+    rdfs:comment "Relates a processing system to conversations it handles" ;
+    owl:maxCardinality "1"^^xsd:nonNegativeInteger .
+
+cognition_patterns:hasPattern a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range cognition_patterns:Pattern ;
+    rdfs:comment "Links a processing system to recognized patterns" .
+
+cognition_patterns:transmitsPattern a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:PatternTransmission ;
+    rdfs:range cognition_patterns:Pattern ;
+    rdfs:comment "Specifies which pattern is being transmitted" .
+
+cognition_patterns:hasTemporalContext a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range cognition_patterns:TemporalContext ;
+    rdfs:comment "Temporal context of the processing" .
+
+cognition_patterns:processingStatus a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range cognition_patterns:ProcessingStatus ;
+    rdfs:comment "Current processing status" .
+
+# Pattern Type System
+cognition_patterns:PatternType a owl:Class ;
+    rdfs:subClassOf cognition_patterns:Pattern ;
+    rdfs:label "Pattern Type" ;
+    rdfs:comment "Classification of cognitive patterns" .
+
+cognition_patterns:RecurrentPattern rdfs:subClassOf cognition_patterns:PatternType ;
+    rdfs:label "Recurrent Pattern" ;
+    rdfs:comment "Pattern that appears repeatedly across contexts" .
+
+cognition_patterns:EmergentPattern rdfs:subClassOf cognition_patterns:PatternType ;
+    rdfs:label "Emergent Pattern" ;
+    rdfs:comment "Pattern that emerges from system interactions" .
+
+cognition_patterns:MetaPattern rdfs:subClassOf cognition_patterns:PatternType ;
+    rdfs:label "Meta Pattern" ;
+    rdfs:comment "Pattern describing other patterns" .
+
+# Enhanced Temporal Modeling
+cognition_patterns:TemporalRelation a owl:Class ;
+    rdfs:label "Temporal Relation" ;
+    rdfs:comment "Defines relationships between temporal contexts" .
+
+cognition_patterns:precedesContext a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:TemporalContext ;
+    rdfs:range cognition_patterns:TemporalContext ;
+    rdfs:comment "Indicates temporal precedence between contexts" .
+
+cognition_patterns:hasTemporalDuration a owl:DatatypeProperty ;
+    rdfs:domain cognition_patterns:TemporalContext ;
+    rdfs:range xsd:duration ;
+    rdfs:comment "Duration of a temporal context" .
+
+# Metrics and Measurements
+cognition_patterns:Metric a owl:Class ;
+    rdfs:label "Processing Metric" ;
+    rdfs:comment "Quantitative measure of processing aspects" .
+
+cognition_patterns:hasConfidenceScore a owl:DatatypeProperty ;
+    rdfs:domain cognition_patterns:Pattern ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Confidence score for pattern recognition (0-1)" .
+
+cognition_patterns:hasProcessingTime a owl:DatatypeProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range xsd:duration ;
+    rdfs:comment "Time taken for processing" .
+
+cognition_patterns:hasResourceUsage a owl:DatatypeProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Resource usage metric (0-1)" .
+
+# Integration Properties
+cognition_patterns:implementsMetaConcept a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:ProcessingSystem ;
+    rdfs:range meta:Concept ;
+    rdfs:comment "Links to implemented meta concepts" .
+
+cognition_patterns:solvesProblem a owl:ObjectProperty ;
+    rdfs:domain cognition_patterns:Pattern ;
+    rdfs:range problem:Problem ;
+    rdfs:comment "Links pattern to problem it addresses" .
+
+# SHACL Validation
+cognition_patterns:ProcessingSystemShape a sh:NodeShape ;
+    sh:targetClass cognition_patterns:ProcessingSystem ;
+    sh:property [
+        sh:path cognition_patterns:processingStatus ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path cognition_patterns:hasTemporalContext ;
+        sh:minCount 1 ;
+    ] .
+
+cognition_patterns:PatternTransmissionShape a sh:NodeShape ;
+    sh:targetClass cognition_patterns:PatternTransmission ;
+    sh:property [
+        sh:path cognition_patterns:transmitsPattern ;
+        sh:minCount 1 ;
+    ] .
+
+cognition_patterns:PatternShape a sh:NodeShape ;
+    sh:targetClass cognition_patterns:Pattern ;
+    sh:property [
+        sh:path cognition_patterns:hasConfidenceScore ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1 ;
+        sh:minCount 1 ;
+    ] .
+
+cognition_patterns:TemporalContextShape a sh:NodeShape ;
+    sh:targetClass cognition_patterns:TemporalContext ;
+    sh:property [
+        sh:path cognition_patterns:hasTemporalDuration ;
+        sh:datatype xsd:duration ;
+        sh:minCount 1 ;
+    ] .
+
+# Example Instances
+cognition_patterns:ExampleRecurrentPattern a cognition_patterns:RecurrentPattern ;
+    rdfs:label "Question-Answer Pattern" ;
+    cognition_patterns:hasConfidenceScore "0.95"^^xsd:decimal ;
+    rdfs:comment "Common pattern in conversational exchanges" .
+
+cognition_patterns:ExampleProcessingSystem a cognition_patterns:ProcessingSystem ;
+    rdfs:label "Pattern Recognition Engine" ;
+    cognition_patterns:processingStatus cognition_patterns:Processing ;
+    cognition_patterns:hasResourceUsage "0.75"^^xsd:decimal ;
+    cognition_patterns:hasPattern cognition_patterns:ExampleRecurrentPattern .
+
+cognition_patterns:ExampleTemporalContext a cognition_patterns:TemporalContext ;
+    rdfs:label "Processing Window" ;
+    cognition_patterns:hasTemporalDuration "PT1H"^^xsd:duration ;
+    rdfs:comment "One-hour processing window" . 

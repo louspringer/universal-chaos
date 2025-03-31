@@ -1,0 +1,185 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix guidance: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+
+guidance: a owl:Ontology ;
+    rdfs:label "Universal Chaos Guidance Ontology"@en ;
+    rdfs:comment """Guidance domain concepts for the Universal Chaos project.
+    Defines guidance rules, patterns, and best practices."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: .
+
+# Core Classes
+guidance:GuidanceRule rdfs:subClassOf meta:Concept ;
+    rdfs:label "Guidance Rule"@en ;
+    rdfs:comment "A rule providing guidance for project activities"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:Pattern rdfs:subClassOf meta:Concept ;
+    rdfs:label "Pattern"@en ;
+    rdfs:comment "A reusable pattern for project activities"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:BestPractice rdfs:subClassOf meta:Concept ;
+    rdfs:label "Best Practice"@en ;
+    rdfs:comment "A recommended practice for project activities"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:ValidationRule rdfs:subClassOf meta:Concept ;
+    rdfs:label "Validation Rule"@en ;
+    rdfs:comment "A rule for validating project artifacts"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Rule Types
+guidance:OntologyRule rdfs:subClassOf guidance:GuidanceRule ;
+    rdfs:label "Ontology Rule"@en ;
+    rdfs:comment "A rule for ontology development"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:ProcessRule rdfs:subClassOf guidance:GuidanceRule ;
+    rdfs:label "Process Rule"@en ;
+    rdfs:comment "A rule for process execution"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:SecurityRule rdfs:subClassOf guidance:GuidanceRule ;
+    rdfs:label "Security Rule"@en ;
+    rdfs:comment "A rule for security practices"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+guidance:hasPriority a owl:DatatypeProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range xsd:integer ;
+    rdfs:label "has priority"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:hasDescription a owl:DatatypeProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range xsd:string ;
+    rdfs:label "has description"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:hasValidationRule a owl:ObjectProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range guidance:ValidationRule ;
+    rdfs:label "has validation rule"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:appliesTo a owl:ObjectProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range meta:Concept ;
+    rdfs:label "applies to"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:hasPattern a owl:ObjectProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range guidance:Pattern ;
+    rdfs:label "has pattern"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:hasBestPractice a owl:ObjectProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range guidance:BestPractice ;
+    rdfs:label "has best practice"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:hasExample a owl:DatatypeProperty ;
+    rdfs:domain guidance:GuidanceRule ;
+    rdfs:range xsd:string ;
+    rdfs:label "has example"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+guidance:GuidanceRuleShape a sh:NodeShape ;
+    sh:targetClass guidance:GuidanceRule ;
+    sh:property [
+        sh:path guidance:hasPriority ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path guidance:hasDescription ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path guidance:hasValidationRule ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path guidance:appliesTo ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+guidance:OntologyVersioningRule a guidance:OntologyRule ;
+    rdfs:label "Ontology Versioning Rule"@en ;
+    rdfs:comment "Rule for managing ontology versions"@en ;
+    owl:versionInfo "1.0.0" ;
+    guidance:hasPriority 1 ;
+    guidance:hasDescription "Use semantic versioning for ontology versions"@en ;
+    guidance:hasValidationRule guidance:VersionValidationRule ;
+    guidance:appliesTo meta:Concept ;
+    guidance:hasPattern guidance:SemanticVersioningPattern ;
+    guidance:hasBestPractice guidance:VersionControlPractice ;
+    guidance:hasExample "owl:versionInfo \"1.0.0\""@en .
+
+guidance:VersionValidationRule a guidance:ValidationRule ;
+    rdfs:label "Version Validation Rule"@en ;
+    rdfs:comment "Validates ontology version format"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:SemanticVersioningPattern a guidance:Pattern ;
+    rdfs:label "Semantic Versioning Pattern"@en ;
+    rdfs:comment "Pattern for semantic versioning"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:VersionControlPractice a guidance:BestPractice ;
+    rdfs:label "Version Control Practice"@en ;
+    rdfs:comment "Best practice for version control"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:SecurityCredentialRule a guidance:SecurityRule ;
+    rdfs:label "Security Credential Rule"@en ;
+    rdfs:comment "Rule for handling security credentials"@en ;
+    owl:versionInfo "1.0.0" ;
+    guidance:hasPriority 2 ;
+    guidance:hasDescription "Never include sensitive information in code"@en ;
+    guidance:hasValidationRule guidance:CredentialValidationRule ;
+    guidance:appliesTo meta:Concept ;
+    guidance:hasPattern guidance:EnvironmentVariablePattern ;
+    guidance:hasBestPractice guidance:SecureCredentialPractice ;
+    guidance:hasExample "Use environment variables for credentials"@en .
+
+guidance:CredentialValidationRule a guidance:ValidationRule ;
+    rdfs:label "Credential Validation Rule"@en ;
+    rdfs:comment "Validates credential handling"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:EnvironmentVariablePattern a guidance:Pattern ;
+    rdfs:label "Environment Variable Pattern"@en ;
+    rdfs:comment "Pattern for using environment variables"@en ;
+    owl:versionInfo "1.0.0" .
+
+guidance:SecureCredentialPractice a guidance:BestPractice ;
+    rdfs:label "Secure Credential Practice"@en ;
+    rdfs:comment "Best practice for credential security"@en ;
+    owl:versionInfo "1.0.0" . 

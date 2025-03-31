@@ -1,0 +1,198 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix pm: <#> .
+
+# Core ontology metadata
+pm:PrefixManagementOntology a owl:Ontology ;
+    rdfs:label "Universal Chaos Prefix Management Ontology"@en ;
+    rdfs:comment """Prefix management for universal chaos ontology development.
+    Uses relative paths by default and provides clear documentation."""@en ;
+    owl:versionInfo "1.0.0" .
+
+# Core classes for prefix management
+pm:Prefix a owl:Class ;
+    rdfs:label "Prefix"@en ;
+    rdfs:comment "A namespace prefix used in ontologies"@en ;
+    owl:versionInfo "1.0.0" .
+
+pm:PrefixCategory a owl:Class ;
+    rdfs:label "Prefix Category"@en ;
+    rdfs:comment "A category of prefixes (e.g., standard, custom, domain-specific)"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+pm:hasPrefix a owl:DatatypeProperty ;
+    rdfs:domain pm:Prefix ;
+    rdfs:range xsd:string ;
+    rdfs:label "has prefix"@en ;
+    rdfs:comment "The actual prefix string"@en ;
+    owl:versionInfo "1.0.0" .
+
+pm:hasNamespace a owl:DatatypeProperty ;
+    rdfs:domain pm:Prefix ;
+    rdfs:range xsd:string ;
+    rdfs:label "has namespace"@en ;
+    rdfs:comment "The namespace URI associated with the prefix"@en ;
+    owl:versionInfo "1.0.0" .
+
+pm:hasCategory a owl:ObjectProperty ;
+    rdfs:domain pm:Prefix ;
+    rdfs:range pm:PrefixCategory ;
+    rdfs:label "has category"@en ;
+    rdfs:comment "Links a prefix to its category"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+pm:PrefixShape a sh:NodeShape ;
+    sh:targetClass pm:Prefix ;
+    sh:property [
+        sh:path pm:hasPrefix ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[a-z][a-z0-9_]*$" ;  # Enforce lowercase with underscores
+        sh:message "Prefix must be lowercase, start with letter, contain only letters, numbers, and underscores"@en ;
+    ] ;
+    sh:property [
+        sh:path pm:hasNamespace ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Namespace URI is required"@en ;
+    ] ;
+    sh:property [
+        sh:path pm:hasCategory ;
+        sh:class pm:PrefixCategory ;
+        sh:minCount 1 ;
+        sh:message "Prefix must have a category"@en ;
+    ] .
+
+# Example Instances
+pm:StandardPrefix a pm:PrefixCategory ;
+    rdfs:label "Standard Prefix"@en ;
+    rdfs:comment "Standard RDF/RDFS/OWL prefixes"@en ;
+    owl:versionInfo "1.0.0" .
+
+pm:ExamplePrefix a pm:Prefix ;
+    rdfs:label "Example Prefix"@en ;
+    rdfs:comment "An example prefix instance"@en ;
+    owl:versionInfo "1.0.0" ;
+    pm:hasPrefix "ex" ;
+    pm:hasNamespace "http://example.org/" ;
+    pm:hasCategory pm:StandardPrefix .
+
+# Standard categories
+pm:CoreCategory a pm:PrefixCategory ;
+    rdfs:label "Core Category"@en ;
+    rdfs:comment "Core ontology prefixes used across the framework"@en .
+
+pm:DomainCategory a pm:PrefixCategory ;
+    rdfs:label "Domain Category"@en ;
+    rdfs:comment "Domain-specific ontology prefixes"@en .
+
+pm:ExternalCategory a pm:PrefixCategory ;
+    rdfs:label "External Category"@en ;
+    rdfs:comment "External ontology prefixes (e.g., W3C standards)"@en .
+
+# Core prefix definitions
+pm:MetaPrefix a pm:Prefix ;
+    pm:hasPrefix "meta" ;
+    pm:hasURI "./meta#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Core meta-level concepts"@en .
+
+pm:MetaMetaPrefix a pm:Prefix ;
+    pm:hasPrefix "metameta" ;
+    pm:hasURI "./metameta#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Meta-meta level concepts"@en .
+
+pm:ProblemPrefix a pm:Prefix ;
+    pm:hasPrefix "problem" ;
+    pm:hasURI "./problem#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Problem domain concepts"@en .
+
+pm:SolutionPrefix a pm:Prefix ;
+    pm:hasPrefix "solution" ;
+    pm:hasURI "./solution#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Solution domain concepts"@en .
+
+pm:ConversationPrefix a pm:Prefix ;
+    pm:hasPrefix "conversation" ;
+    pm:hasURI "./conversation#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Conversation modeling concepts"@en .
+
+pm:ProcessPrefix a pm:Prefix ;
+    pm:hasPrefix "process" ;
+    pm:hasURI "./process#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Process modeling concepts"@en .
+
+pm:AgentPrefix a pm:Prefix ;
+    pm:hasPrefix "agent" ;
+    pm:hasURI "./agent#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Agent modeling concepts"@en .
+
+pm:TimePrefix a pm:Prefix ;
+    pm:hasPrefix "time" ;
+    pm:hasURI "./time#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Temporal modeling concepts"@en .
+
+pm:GuidancePrefix a pm:Prefix ;
+    pm:hasPrefix "guidance" ;
+    pm:hasURI "./guidance#" ;
+    pm:inCategory pm:CoreCategory ;
+    pm:isRelativePath true ;
+    rdfs:comment "Guidance and rules concepts"@en .
+
+# External standard prefixes
+pm:RDFPrefix a pm:Prefix ;
+    pm:hasPrefix "rdf" ;
+    pm:hasURI "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ;
+    pm:inCategory pm:ExternalCategory ;
+    pm:isRelativePath false ;
+    rdfs:comment "RDF core vocabulary"@en .
+
+pm:RDFSPrefix a pm:Prefix ;
+    pm:hasPrefix "rdfs" ;
+    pm:hasURI "http://www.w3.org/2000/01/rdf-schema#" ;
+    pm:inCategory pm:ExternalCategory ;
+    pm:isRelativePath false ;
+    rdfs:comment "RDF Schema vocabulary"@en .
+
+pm:OWLPrefix a pm:Prefix ;
+    pm:hasPrefix "owl" ;
+    pm:hasURI "http://www.w3.org/2002/07/owl#" ;
+    pm:inCategory pm:ExternalCategory ;
+    pm:isRelativePath false ;
+    rdfs:comment "OWL vocabulary"@en .
+
+pm:XSDPrefix a pm:Prefix ;
+    pm:hasPrefix "xsd" ;
+    pm:hasURI "http://www.w3.org/2001/XMLSchema#" ;
+    pm:inCategory pm:ExternalCategory ;
+    pm:isRelativePath false ;
+    rdfs:comment "XML Schema datatypes"@en .
+
+pm:SHACLPrefix a pm:Prefix ;
+    pm:hasPrefix "sh" ;
+    pm:hasURI "http://www.w3.org/ns/shacl#" ;
+    pm:inCategory pm:ExternalCategory ;
+    pm:isRelativePath false ;
+    rdfs:comment "SHACL validation vocabulary"@en . 

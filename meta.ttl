@@ -1,1 +1,109 @@
-ontology-framework/meta.ttl
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix meta: <#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+# Ontology Metadata
+meta: a owl:Ontology ;
+    rdfs:label "Universal Chaos Meta Ontology"@en ;
+    rdfs:comment """Core meta ontology providing fundamental concepts and relationships 
+    shared across all domain ontologies in the Universal Chaos project."""@en ;
+    owl:versionInfo "1.0.0" .
+
+# Core Classes
+meta:Concept a owl:Class ;
+    rdfs:label "Concept"@en ;
+    rdfs:comment "A fundamental concept in the ontology"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:Person a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Person"@en ;
+    rdfs:comment "A human being or AI agent"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:Position a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Position"@en ;
+    rdfs:comment "A position or role in a system"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:AbstractionDimension a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Abstraction Dimension"@en ;
+    rdfs:comment "A dimension along which concepts can be abstracted"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:ChaosSystem a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Chaos System"@en ;
+    rdfs:comment "A system exhibiting chaotic behavior"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+meta:hasPosition a owl:ObjectProperty ;
+    rdfs:domain meta:Person ;
+    rdfs:range meta:Position ;
+    rdfs:label "has position"@en ;
+    rdfs:comment "Links a person to their position"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:hasDimension a owl:ObjectProperty ;
+    rdfs:domain meta:Concept ;
+    rdfs:range meta:AbstractionDimension ;
+    rdfs:label "has dimension"@en ;
+    rdfs:comment "Links a concept to its abstraction dimension"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:hasState a owl:DatatypeProperty ;
+    rdfs:domain meta:ChaosSystem ;
+    rdfs:range xsd:string ;
+    rdfs:label "has state"@en ;
+    rdfs:comment "Current state of a chaos system"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+meta:ConceptShape a sh:NodeShape ;
+    sh:targetClass meta:Concept ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path rdfs:comment ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path owl:versionInfo ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+meta:ExamplePerson a meta:Person ;
+    rdfs:label "Example Person"@en ;
+    rdfs:comment "An example person instance"@en ;
+    owl:versionInfo "1.0.0" ;
+    meta:hasPosition meta:ExamplePosition .
+
+meta:ExamplePosition a meta:Position ;
+    rdfs:label "Example Position"@en ;
+    rdfs:comment "An example position instance"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:ExampleDimension a meta:AbstractionDimension ;
+    rdfs:label "Example Dimension"@en ;
+    rdfs:comment "An example abstraction dimension"@en ;
+    owl:versionInfo "1.0.0" .
+
+meta:ExampleSystem a meta:ChaosSystem ;
+    rdfs:label "Example System"@en ;
+    rdfs:comment "An example chaos system"@en ;
+    owl:versionInfo "1.0.0" ;
+    meta:hasState "Initial" . 

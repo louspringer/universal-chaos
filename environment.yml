@@ -1,0 +1,25 @@
+name: universal-chaos
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.10
+  - pip
+  - rdflib
+  - requests
+  - pip:
+    - gh  # GitHub CLI if available via pip
+    # Add any other pip-specific packages here
+
+# Development tools
+  - black  # Code formatting
+  - pylint  # Code quality
+  - pytest  # Testing
+  - ipython  # Interactive development
+
+# RDF/Ontology tools
+  - owlready2  # Ontology management
+  - pyshacl  # SHACL validation
+
+# Version control
+  - git  # For submodule management 

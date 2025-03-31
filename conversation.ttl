@@ -1,1 +1,163 @@
-ontology-framework/conversation.ttl
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix conversation: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+
+# Ontology Metadata
+conversation: a owl:Ontology ;
+    rdfs:label "Universal Chaos Conversation Ontology"@en ;
+    rdfs:comment """Conversation domain concepts for the Universal Chaos project.
+    Defines conversations, messages, participants, and their relationships."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: .
+
+# Core Classes
+conversation:Conversation a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Conversation"@en ;
+    rdfs:comment "A conversation between participants"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:Message a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Message"@en ;
+    rdfs:comment "A message within a conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:Participant a owl:Class ;
+    rdfs:subClassOf meta:Person ;
+    rdfs:label "Participant"@en ;
+    rdfs:comment "A participant in a conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Message Categories
+conversation:Query a owl:Class ;
+    rdfs:subClassOf conversation:Message ;
+    rdfs:label "Query"@en ;
+    rdfs:comment "A question or request for information"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:Response a owl:Class ;
+    rdfs:subClassOf conversation:Message ;
+    rdfs:label "Response"@en ;
+    rdfs:comment "A response to a query"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:Action a owl:Class ;
+    rdfs:subClassOf conversation:Message ;
+    rdfs:label "Action"@en ;
+    rdfs:comment "A message that triggers an action"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+conversation:hasParticipant a owl:ObjectProperty ;
+    rdfs:domain conversation:Conversation ;
+    rdfs:range conversation:Participant ;
+    rdfs:label "has participant"@en ;
+    rdfs:comment "Links a conversation to its participants"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:hasMessage a owl:ObjectProperty ;
+    rdfs:domain conversation:Conversation ;
+    rdfs:range conversation:Message ;
+    rdfs:label "has message"@en ;
+    rdfs:comment "Links a conversation to its messages"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:sender a owl:ObjectProperty ;
+    rdfs:domain conversation:Message ;
+    rdfs:range conversation:Participant ;
+    rdfs:label "sender"@en ;
+    rdfs:comment "Links a message to its sender"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:timestamp a owl:DatatypeProperty ;
+    rdfs:domain conversation:Message ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "timestamp"@en ;
+    rdfs:comment "When the message was sent"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:content a owl:DatatypeProperty ;
+    rdfs:domain conversation:Message ;
+    rdfs:range xsd:string ;
+    rdfs:label "content"@en ;
+    rdfs:comment "Content of the message"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+conversation:ConversationShape a sh:NodeShape ;
+    sh:targetClass conversation:Conversation ;
+    sh:property [
+        sh:path conversation:hasParticipant ;
+        sh:minCount 2 ;
+    ] ;
+    sh:property [
+        sh:path conversation:hasMessage ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+conversation:MessageShape a sh:NodeShape ;
+    sh:targetClass conversation:Message ;
+    sh:property [
+        sh:path conversation:sender ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path conversation:timestamp ;
+        sh:minCount 1 ;
+        sh:datatype xsd:dateTime ;
+    ] ;
+    sh:property [
+        sh:path conversation:content ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+conversation:ExampleConversation a conversation:Conversation ;
+    rdfs:label "Weather Discussion"@en ;
+    rdfs:comment "Discussion about weather prediction"@en ;
+    owl:versionInfo "1.0.0" ;
+    conversation:hasParticipant conversation:User, conversation:Assistant ;
+    conversation:hasMessage conversation:ExampleQuery, conversation:ExampleResponse .
+
+conversation:User a conversation:Participant ;
+    rdfs:label "User"@en ;
+    rdfs:comment "Human user in the conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:Assistant a conversation:Participant ;
+    rdfs:label "Assistant"@en ;
+    rdfs:comment "AI assistant in the conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+conversation:ExampleQuery a conversation:Query ;
+    rdfs:label "Weather Query"@en ;
+    rdfs:comment "Query about weather prediction"@en ;
+    owl:versionInfo "1.0.0" ;
+    conversation:sender conversation:User ;
+    conversation:timestamp "2024-03-31T12:00:00Z"^^xsd:dateTime ;
+    conversation:content "How can we predict weather patterns?" .
+
+conversation:ExampleResponse a conversation:Response ;
+    rdfs:label "Weather Response"@en ;
+    rdfs:comment "Response about weather prediction"@en ;
+    owl:versionInfo "1.0.0" ;
+    conversation:sender conversation:Assistant ;
+    conversation:timestamp "2024-03-31T12:00:01Z"^^xsd:dateTime ;
+    conversation:content "We can use mathematical models and chaos theory to predict weather patterns." . 

@@ -1,0 +1,183 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix agent: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+@prefix solution: <./solution#> .
+@prefix conversation: <./conversation#> .
+@prefix process: <./process#> .
+@prefix guidance: <./guidance#> .
+
+agent: a owl:Ontology ;
+    rdfs:label "Universal Chaos Agent Ontology"@en ;
+    rdfs:comment """Agent domain concepts for the Universal Chaos project.
+    Defines agents, roles, and capabilities."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: ;
+    owl:imports solution: ;
+    owl:imports conversation: ;
+    owl:imports process: ;
+    owl:imports guidance: .
+
+# Core Classes
+agent:Agent rdfs:subClassOf meta:Concept ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "An agent in the system"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:Role rdfs:subClassOf meta:Concept ;
+    rdfs:label "Role"@en ;
+    rdfs:comment "A role that an agent can have"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:Capability rdfs:subClassOf meta:Concept ;
+    rdfs:label "Capability"@en ;
+    rdfs:comment "A capability of an agent"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:Action rdfs:subClassOf meta:Concept ;
+    rdfs:label "Action"@en ;
+    rdfs:comment "An action that an agent can perform"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Agent Types
+agent:HumanAgent rdfs:subClassOf agent:Agent ;
+    rdfs:label "Human Agent"@en ;
+    rdfs:comment "A human agent in the system"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:SoftwareAgent rdfs:subClassOf agent:Agent ;
+    rdfs:label "Software Agent"@en ;
+    rdfs:comment "A software agent in the system"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:AIAgent rdfs:subClassOf agent:Agent ;
+    rdfs:label "AI Agent"@en ;
+    rdfs:comment "An AI agent in the system"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+agent:hasRole a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range agent:Role ;
+    rdfs:label "has role"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:hasCapability a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range agent:Capability ;
+    rdfs:label "has capability"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:canPerform a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range agent:Action ;
+    rdfs:label "can perform"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:hasStatus a owl:DatatypeProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range xsd:string ;
+    rdfs:label "has status"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:hasGuidance a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range guidance:GuidanceRule ;
+    rdfs:label "has guidance"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:participatesIn a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range process:Process ;
+    rdfs:label "participates in"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:hasConversation a owl:ObjectProperty ;
+    rdfs:domain agent:Agent ;
+    rdfs:range conversation:Conversation ;
+    rdfs:label "has conversation"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+agent:AgentShape a sh:NodeShape ;
+    sh:targetClass agent:Agent ;
+    sh:property [
+        sh:path agent:hasRole ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path agent:hasCapability ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path agent:hasStatus ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+agent:ExampleHumanAgent a agent:HumanAgent ;
+    rdfs:label "John Doe"@en ;
+    rdfs:comment "Example human agent"@en ;
+    owl:versionInfo "1.0.0" ;
+    agent:hasRole agent:DeveloperRole ;
+    agent:hasCapability agent:CodingCapability ;
+    agent:canPerform agent:WriteCodeAction ;
+    agent:hasStatus "active"@en ;
+    agent:hasGuidance guidance:SecurityCredentialRule ;
+    agent:participatesIn process:ExampleDevelopmentProcess ;
+    agent:hasConversation conversation:ExampleChaosConversation .
+
+agent:ExampleAIAgent a agent:AIAgent ;
+    rdfs:label "AI Assistant"@en ;
+    rdfs:comment "Example AI agent"@en ;
+    owl:versionInfo "1.0.0" ;
+    agent:hasRole agent:AssistantRole ;
+    agent:hasCapability agent:AnalysisCapability ;
+    agent:canPerform agent:AnalyzeDataAction ;
+    agent:hasStatus "active"@en ;
+    agent:hasGuidance guidance:OntologyVersioningRule ;
+    agent:participatesIn process:ExampleDevelopmentProcess ;
+    agent:hasConversation conversation:ExampleChaosConversation .
+
+agent:DeveloperRole a agent:Role ;
+    rdfs:label "Developer Role"@en ;
+    rdfs:comment "Role for software development"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:AssistantRole a agent:Role ;
+    rdfs:label "Assistant Role"@en ;
+    rdfs:comment "Role for AI assistance"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:CodingCapability a agent:Capability ;
+    rdfs:label "Coding Capability"@en ;
+    rdfs:comment "Ability to write code"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:AnalysisCapability a agent:Capability ;
+    rdfs:label "Analysis Capability"@en ;
+    rdfs:comment "Ability to analyze data"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:WriteCodeAction a agent:Action ;
+    rdfs:label "Write Code Action"@en ;
+    rdfs:comment "Action of writing code"@en ;
+    owl:versionInfo "1.0.0" .
+
+agent:AnalyzeDataAction a agent:Action ;
+    rdfs:label "Analyze Data Action"@en ;
+    rdfs:comment "Action of analyzing data"@en ;
+    owl:versionInfo "1.0.0" . 

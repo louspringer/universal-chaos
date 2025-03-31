@@ -1,1 +1,123 @@
-ontology-framework/solution.ttl
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix solution: <#> .
+@prefix meta: <./meta#> .
+@prefix metameta: <./metameta#> .
+@prefix problem: <./problem#> .
+
+# Ontology Metadata
+solution: a owl:Ontology ;
+    rdfs:label "Universal Chaos Solution Ontology"@en ;
+    rdfs:comment """Solution domain concepts for the Universal Chaos project.
+    Defines solutions, implementations, validations, and their relationships."""@en ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports meta: ;
+    owl:imports metameta: ;
+    owl:imports problem: .
+
+# Core Classes
+solution:Solution a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Solution"@en ;
+    rdfs:comment "A solution to a problem"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:Implementation a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Implementation"@en ;
+    rdfs:comment "A concrete implementation of a solution"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:Validation a owl:Class ;
+    rdfs:subClassOf meta:Concept ;
+    rdfs:label "Validation"@en ;
+    rdfs:comment "Validation of a solution implementation"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Solution Categories
+solution:TechnicalSolution a owl:Class ;
+    rdfs:subClassOf solution:Solution ;
+    rdfs:label "Technical Solution"@en ;
+    rdfs:comment "A technical approach to solving a problem"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:ProcessSolution a owl:Class ;
+    rdfs:subClassOf solution:Solution ;
+    rdfs:label "Process Solution"@en ;
+    rdfs:comment "A process-based approach to solving a problem"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:ChaosSolution a owl:Class ;
+    rdfs:subClassOf solution:Solution ;
+    rdfs:label "Chaos Solution"@en ;
+    rdfs:comment "A solution for chaotic systems"@en ;
+    owl:versionInfo "1.0.0" .
+
+# Properties
+solution:solvesProblem a owl:ObjectProperty ;
+    rdfs:domain solution:Solution ;
+    rdfs:range problem:Problem ;
+    rdfs:label "solves problem"@en ;
+    rdfs:comment "Links a solution to the problem it solves"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:hasImplementation a owl:ObjectProperty ;
+    rdfs:domain solution:Solution ;
+    rdfs:range solution:Implementation ;
+    rdfs:label "has implementation"@en ;
+    rdfs:comment "Links a solution to its implementation"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:hasValidation a owl:ObjectProperty ;
+    rdfs:domain solution:Implementation ;
+    rdfs:range solution:Validation ;
+    rdfs:label "has validation"@en ;
+    rdfs:comment "Links an implementation to its validation"@en ;
+    owl:versionInfo "1.0.0" .
+
+solution:validationStatus a owl:DatatypeProperty ;
+    rdfs:domain solution:Validation ;
+    rdfs:range xsd:string ;
+    rdfs:label "validation status"@en ;
+    rdfs:comment "Status of the validation"@en ;
+    owl:versionInfo "1.0.0" .
+
+# SHACL Validation
+solution:SolutionShape a sh:NodeShape ;
+    sh:targetClass solution:Solution ;
+    sh:property [
+        sh:path solution:solvesProblem ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path solution:hasImplementation ;
+        sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+# Example Instances
+solution:WeatherModel a solution:ChaosSolution ;
+    rdfs:label "Weather Model"@en ;
+    rdfs:comment "Mathematical model for weather prediction"@en ;
+    owl:versionInfo "1.0.0" ;
+    solution:solvesProblem problem:WeatherPrediction ;
+    solution:hasImplementation solution:WeatherModelImpl .
+
+solution:WeatherModelImpl a solution:Implementation ;
+    rdfs:label "Weather Model Implementation"@en ;
+    rdfs:comment "Implementation of the weather prediction model"@en ;
+    owl:versionInfo "1.0.0" ;
+    solution:hasValidation solution:WeatherModelValidation .
+
+solution:WeatherModelValidation a solution:Validation ;
+    rdfs:label "Weather Model Validation"@en ;
+    rdfs:comment "Validation of the weather model implementation"@en ;
+    owl:versionInfo "1.0.0" ;
+    solution:validationStatus "Passed" .

@@ -63,7 +63,7 @@ def print_results(results):
 
 def main():
     # Define the directory and search terms
-    ontology_directory = '../ontology-framework'
+    ontology_directory = './ontology-framework'
     search_terms = [
         'issue', 'task', 'project', 'bug', 'ticket', 
         'tracking', 'workflow', 'status', 'priority',
